@@ -1,0 +1,41 @@
+//Go的html /模板包为HTML模板提供了丰富的模板语言。 它主要用于Web应用程序中，以客户端浏览器的方式显示数据。
+//Go的模板语言的一个很大的好处是数据的自动转义。
+//没有必要担心XSS攻击，因为Go解析HTML模板并在将其显示给浏览器之前转义所有输入。
+
+package main
+ 
+import (
+    "html/template"
+    "net/http"
+)
+ 
+typeTodostruct {
+    Titlestring
+    Done  bool
+}
+ 
+typeTodoPageDatastruct {
+    PageTitlestring
+    Todos     []Todo
+}
+ 
+funcmain() {
+    tmpl := template.Must(template.ParseFiles("layout.html"))
+ 
+    http.HandleFunc("/", func(whttp.ResponseWriter, r *http.Request) {
+        data :=TodoPageData{
+            PageTitle:"My TODO list",
+            Todos:[]Todo{
+                {Title:"Task 1", Done: false},
+                {Title:"Task 2", Done: true},
+                {Title:"Task 3", Done: true},
+            },
+        }
+        tmpl.Execute(w, data)
+    })
+ 
+    http.ListenAndServe(":8086", nil)
+}
+ 
+ 
+reference:https://gowebexamples.com/templates/
